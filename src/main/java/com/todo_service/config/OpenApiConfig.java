@@ -15,9 +15,12 @@ public class OpenApiConfig {
         return new OpenAPI()
                 .info(new Info()
                         .title("Todo API")
-                        .version("1.0")
+                        .version("1.0.0") // важная точная версия
                         .description("API для управления задачами")
-                        .contact(new Contact().name("Alex").email("sasalozov2004@gmail.com"))
+                        .contact(new Contact()
+                                .name("Alex")
+                                .email("sasalozov2004@gmail.com")
+                        )
                 );
     }
 }
