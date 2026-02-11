@@ -4,6 +4,7 @@ import com.todo_service.model.entity.Task;
 import com.todo_service.model.request.task.TaskCreateRequest;
 import com.todo_service.model.request.task.TaskUpdateRequest;
 import com.todo_service.model.response.ApiResponse;
+import com.todo_service.model.response.PaginationResponse;
 import com.todo_service.model.response.task.TaskResponse;
 import com.todo_service.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -59,6 +60,17 @@ public class TaskController {
     public ResponseEntity<ApiResponse<Void>> deleteTask(@PathVariable Integer id){
         taskService.deleteTask(id);
         return ResponseEntity.ok(ApiResponse.success(null));
+    }
+
+    @GetMapping("/page")
+    @Operation(summary = "получить список задач с пагинацией")
+    public ResponseEntity<ApiResponse<PaginationResponse<TaskResponse>>> getTasksPage(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int limit){
+
+        PaginationResponse<TaskResponse> response = taskService.getTaskPage(page, limit);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
     }
 
 }

@@ -3,7 +3,9 @@ package com.todo_service.service;
 
 import com.todo_service.model.request.task.TaskCreateRequest;
 import com.todo_service.model.request.task.TaskUpdateRequest;
+import com.todo_service.model.response.PaginationResponse;
 import com.todo_service.model.response.task.TaskResponse;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -17,5 +19,5 @@ public interface TaskService {
     TaskResponse updateTask(Integer id, TaskUpdateRequest request);
     void deleteTask(Integer id);
 
-    void checkTaskExists(Integer id);
+    PaginationResponse<TaskResponse> getTaskPage(int page, int size);
 }

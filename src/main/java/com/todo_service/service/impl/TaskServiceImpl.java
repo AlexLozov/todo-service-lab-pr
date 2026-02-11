@@ -6,10 +6,14 @@ import com.todo_service.mapper.TaskMapper;
 import com.todo_service.model.entity.Task;
 import com.todo_service.model.request.task.TaskCreateRequest;
 import com.todo_service.model.request.task.TaskUpdateRequest;
+import com.todo_service.model.response.PaginationResponse;
 import com.todo_service.model.response.task.TaskResponse;
 import com.todo_service.repository.TaskRepository;
 import com.todo_service.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,12 +71,26 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public void checkTaskExists(Integer id) {
-        if(!taskRepository.existsById(id)){
-            throw new TaskNotFoundException(
-                    ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)
-            );
-        }
+    public PaginationResponse<TaskResponse> getTaskPage(int page, int limit) {
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Task> tasksPage = taskRepository.findAll(pageable);
+
+        List<TaskResponse> tasks = tasksPage.stream()
+                .map(taskMapper::entityToResponse)
+                .toList();
+
+        PaginationResponse.Pagination pagination = PaginationResponse.Pagination.builder()
+                .page(page)
+                .limit(limit)
+                .pages(tasksPage.getTotalPages())
+                .total(tasksPage.getTotalElements())
+                .build();
+
+        return PaginationResponse.<TaskResponse>builder()
+                .content(tasks)
+                .pagination(pagination)
+                .build();
     }
+
 
 }
