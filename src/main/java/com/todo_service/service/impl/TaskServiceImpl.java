@@ -92,5 +92,32 @@ public class TaskServiceImpl implements TaskService {
                 .build();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PaginationResponse<TaskResponse> getTaskPageByStatus(
+            Boolean isFinished,
+            int page,
+            int limit) {
+
+        Pageable pageable = PageRequest.of(page, limit);
+        Page<Task> tasksPage = taskRepository.findAllByIsFinished(isFinished, pageable);
+
+        List<TaskResponse> tasks = tasksPage.stream()
+                .map(taskMapper::entityToResponse)
+                .toList();
+
+        PaginationResponse.Pagination pagination = PaginationResponse.Pagination.builder()
+                .limit(limit)
+                .page(page)
+                .total(tasksPage.getTotalElements())
+                .pages(tasksPage.getTotalPages())
+                .build();
+
+        return PaginationResponse.<TaskResponse>builder()
+                .pagination(pagination)
+                .content(tasks)
+                .build();
+    }
+
 
 }

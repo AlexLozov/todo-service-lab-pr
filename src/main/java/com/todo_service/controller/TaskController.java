@@ -73,4 +73,16 @@ public class TaskController {
         return ResponseEntity.ok(ApiResponse.success(response));
     }
 
+    @GetMapping("/page/status")
+    @Operation(summary = "получить список всех задач по статусу с пагинацией")
+    public ResponseEntity<ApiResponse<PaginationResponse<TaskResponse>>> getTasksPageByStatus(
+            @RequestParam(defaultValue = "true") Boolean isFinished,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int limit){
+
+        PaginationResponse<TaskResponse> response = taskService.getTaskPageByStatus(isFinished, page, limit);
+
+        return ResponseEntity.ok(ApiResponse.success(response));
+    }
+
 }

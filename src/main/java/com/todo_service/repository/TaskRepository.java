@@ -7,4 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TaskRepository extends JpaRepository<Task, Integer> {
     Page<Task> findAll(Pageable pageable);
+    Page<Task> findAllByIsFinished(Boolean isFinished, Pageable pageable);
 }
