@@ -15,7 +15,7 @@ public interface TaskService {
     Task getTaskById(Integer id);
 
     Task updateTask(Integer id, TaskUpdateRequest request);
-    boolean deleteTask(Integer id);
+    void deleteTask(Integer id);
 
     void checkTaskExists(Integer id);
 }

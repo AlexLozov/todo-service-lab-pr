@@ -9,11 +9,11 @@
 		<version>3.2.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.BicycleShop</groupId>
-	<artifactId>BicycleShop</artifactId>
+	<groupId>com.todo_service</groupId>
+	<artifactId>todo_service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>BicycleShop</name>
-	<description>My Bicycle Shop</description>
+	<name>todo_service</name>
+	<description>My To Do Service</description>
 	<url/>
 	<licenses>
 		<license/>

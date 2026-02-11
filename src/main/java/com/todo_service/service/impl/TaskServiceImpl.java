@@ -24,6 +24,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public Task createTask(TaskCreateRequest request) {
         Task task = taskMapper.createTask(request);
+        task.setIsFinished(false);
         return taskRepository.save(task);
     }
 
@@ -54,12 +55,11 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public boolean deleteTask(Integer id) {
-        if(taskRepository.existsById(id)){
-            taskRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteTask(Integer id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException(ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        taskRepository.deleteById(id);
     }
 
     @Override
