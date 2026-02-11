@@ -4,8 +4,9 @@ import com.todo_service.model.constants.ApiErrorMessage;
 import com.todo_service.model.exception.TaskNotFoundException;
 import com.todo_service.mapper.TaskMapper;
 import com.todo_service.model.entity.Task;
-import com.todo_service.model.request.TaskCreateRequest;
-import com.todo_service.model.request.TaskUpdateRequest;
+import com.todo_service.model.request.task.TaskCreateRequest;
+import com.todo_service.model.request.task.TaskUpdateRequest;
+import com.todo_service.model.response.task.TaskResponse;
 import com.todo_service.repository.TaskRepository;
 import com.todo_service.service.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -22,35 +23,37 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public Task createTask(TaskCreateRequest request) {
+    public TaskResponse createTask(TaskCreateRequest request) {
         Task task = taskMapper.createTask(request);
         task.setIsFinished(false);
-        return taskRepository.save(task);
+        taskRepository.save(task);
+        return taskMapper.entityToResponse(task);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<Task> getTasksList() {
-        return taskRepository.findAll();
+    public List<TaskResponse> getTasksList() {
+        List<Task> tasks = taskRepository.findAll();
+        return taskMapper.entityListToResponse(tasks);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Task getTaskById(Integer id) {
-        return taskRepository.findById(id)
+    public TaskResponse getTaskById(Integer id) {
+        Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)));
+        return taskMapper.entityToResponse(task);
     }
 
     @Override
     @Transactional
-    public Task updateTask(Integer id, TaskUpdateRequest request) {
+    public TaskResponse updateTask(Integer id, TaskUpdateRequest request) {
         Task task = taskRepository
                 .findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)));
 
         Task updatedTask = taskMapper.updateTask(task, request);
-        taskRepository.save(updatedTask);
-        return updatedTask;
+        return taskMapper.entityToResponse(updatedTask);
     }
 
     @Override

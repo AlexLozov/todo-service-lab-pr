@@ -1,13 +1,18 @@
 package com.todo_service.mapper;
 
 import com.todo_service.model.entity.Task;
-import com.todo_service.model.request.TaskCreateRequest;
-import com.todo_service.model.request.TaskUpdateRequest;
-import org.springframework.stereotype.Component;
+import com.todo_service.model.request.task.TaskCreateRequest;
+import com.todo_service.model.request.task.TaskUpdateRequest;
+import com.todo_service.model.response.task.TaskResponse;
+
+import java.util.List;
 
 public interface TaskMapper {
 
     Task createTask(TaskCreateRequest request);
     Task updateTask(Task task, TaskUpdateRequest request);
+    TaskResponse entityToResponse(Task task);
+    List<TaskResponse> entityListToResponse(List<Task> tasks);
+
 
 }

@@ -1,9 +1,10 @@
 package com.todo_service.controller;
 
 import com.todo_service.model.entity.Task;
-import com.todo_service.model.request.TaskCreateRequest;
-import com.todo_service.model.request.TaskUpdateRequest;
+import com.todo_service.model.request.task.TaskCreateRequest;
+import com.todo_service.model.request.task.TaskUpdateRequest;
 import com.todo_service.model.response.ApiResponse;
+import com.todo_service.model.response.task.TaskResponse;
 import com.todo_service.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -25,32 +26,32 @@ public class TaskController {
 
     @PostMapping
     @Operation(summary = "Создать новую задачу")
-    public ResponseEntity<ApiResponse<Task>> createTask(
+    public ResponseEntity<ApiResponse<TaskResponse>> createTask(
             @Valid @RequestBody TaskCreateRequest request){
-        Task task = taskService.createTask(request);
-        return new ResponseEntity<>(ApiResponse.success(task), HttpStatus.CREATED);
+        TaskResponse taskResponse = taskService.createTask(request);
+        return new ResponseEntity<>(ApiResponse.success(taskResponse), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @Operation( summary = "Получить задачу по ID")
-    public ResponseEntity<ApiResponse<Task>> getTaskById(@PathVariable Integer id){
-        Task task = taskService.getTaskById(id);
-        return ResponseEntity.ok(ApiResponse.success(task));
+    public ResponseEntity<ApiResponse<TaskResponse>> getTaskById(@PathVariable Integer id){
+        TaskResponse taskResponse = taskService.getTaskById(id);
+        return ResponseEntity.ok(ApiResponse.success(taskResponse));
     }
 
     @GetMapping
     @Operation(summary = "Получить список задач")
-    public ResponseEntity<ApiResponse<List<Task>>> getTasksList(){
-        List<Task> tasks = taskService.getTasksList();
+    public ResponseEntity<ApiResponse<List<TaskResponse>>> getTasksList(){
+        List<TaskResponse> tasks = taskService.getTasksList();
         return ResponseEntity.ok(ApiResponse.success(tasks));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "изменить задачу по ID")
-    public ResponseEntity<ApiResponse<Task>> updateTask(@PathVariable Integer id,
+    public ResponseEntity<ApiResponse<TaskResponse>> updateTask(@PathVariable Integer id,
                                            @Valid @RequestBody TaskUpdateRequest request){
-        Task task = taskService.updateTask(id, request);
-        return ResponseEntity.ok(ApiResponse.success(task));
+        TaskResponse taskResponse = taskService.updateTask(id, request);
+        return ResponseEntity.ok(ApiResponse.success(taskResponse));
     }
 
     @DeleteMapping("/{id}")
