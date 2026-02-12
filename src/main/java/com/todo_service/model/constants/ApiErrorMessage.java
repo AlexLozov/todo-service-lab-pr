@@ -9,6 +9,8 @@ import lombok.Getter;
 public enum ApiErrorMessage{
     TASK_WITH_ID_NOT_FOUND("Task by id=%s not found"),
 
+    MAIL_EXCEPTION("mail exception"),
+
     ;
 
     private String message;

@@ -15,4 +15,6 @@ public class TaskUpdateRequest implements Serializable {
 
     @Size(max = 128)
     private String description;
+
+    private boolean isFinished;
 }

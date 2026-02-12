@@ -1,5 +1,7 @@
 package com.todo_service.handler;
 
+import com.todo_service.model.constants.ApiErrorMessage;
+import com.todo_service.model.exception.MailSendException;
 import com.todo_service.model.exception.TaskNotFoundException;
 import com.todo_service.model.response.ApiErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +34,23 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @ExceptionHandler(MailSendException.class)
+    public ResponseEntity<ApiErrorResponse> handleMailSendException(
+            MailSendException ex,
+            HttpServletRequest request
+    ){
+        log.error("Email send exception", ex);
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .error(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
     }
 
 

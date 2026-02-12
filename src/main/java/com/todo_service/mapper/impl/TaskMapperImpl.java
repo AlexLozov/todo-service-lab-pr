@@ -23,6 +23,7 @@ public class TaskMapperImpl implements TaskMapper {
     public Task updateTask(Task task, TaskUpdateRequest request) {
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
+        task.setIsFinished(request.isFinished());
         return task;
     }
 
