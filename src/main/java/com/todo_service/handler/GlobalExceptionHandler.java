@@ -1,6 +1,7 @@
 package com.todo_service.handler;
 
 import com.todo_service.model.constants.ApiErrorMessage;
+import com.todo_service.model.exception.MailReadException;
 import com.todo_service.model.exception.MailSendException;
 import com.todo_service.model.exception.TaskNotFoundException;
 import com.todo_service.model.response.ApiErrorResponse;
@@ -53,6 +54,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
     }
 
+
+    @ExceptionHandler(MailReadException.class)
+    public ResponseEntity<ApiErrorResponse> handleMailReadException(
+            MailSendException ex,
+            HttpServletRequest request
+    ){
+        log.error("Email read exception", ex);
+
+        ApiErrorResponse response = ApiErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
+                .error(ex.getMessage())
+                .path(request.getRequestURI())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiErrorResponse> handleValidationException(

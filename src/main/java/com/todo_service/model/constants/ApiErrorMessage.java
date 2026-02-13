@@ -10,6 +10,7 @@ public enum ApiErrorMessage{
     TASK_WITH_ID_NOT_FOUND("Task by id=%s not found"),
 
     MAIL_EXCEPTION("mail exception"),
+    MAIL_FAILED_TO_READ("Failed to read emails via IMAP"),
 
     ;
 

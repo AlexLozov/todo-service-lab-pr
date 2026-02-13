@@ -1,29 +1,28 @@
 package com.todo_service.service.impl;
 
 import com.todo_service.model.constants.ApiErrorMessage;
-import com.todo_service.model.dto.MailDTO;
-import com.todo_service.service.MailService;
+import com.todo_service.model.request.mail.MailSendSmtpRequest;
+import com.todo_service.service.MailSmtpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MailServiceImpl implements MailService {
+public class MailSmtpServiceImpl implements MailSmtpService {
 
     private final JavaMailSender mailSender; // - для SMTP - отправка сообщения
 
     @Override
-    public void sendSimpleEmail(MailDTO mailDTO) {
+    public void sendSimpleEmail(MailSendSmtpRequest request) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setTo(mailDTO.getTo());
-            message.setSubject(mailDTO.getSubject());
-            message.setText(mailDTO.getText());
+            message.setTo(request.getTo());
+            message.setSubject(request.getSubject());
+            message.setText(request.getText());
 
             mailSender.send(message);
         } catch (MailException ex){
