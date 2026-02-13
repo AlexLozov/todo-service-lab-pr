@@ -1,4 +1,4 @@
-package com.todo_service.service.impl;
+package com.todo_service.service.impl.mail;
 
 import com.todo_service.config.ImapProperties;
 import com.todo_service.model.constants.ApiErrorMessage;
@@ -73,7 +73,7 @@ public class MailImapServiceImpl implements MailImapService {
                 emails.add(new MailImapResponse(from, subject, date));
             }
 
-            inbox.close(false);
+            inbox.close(false);  // - false = не сохраняет изменения (READ_ONLY)
             store.close();
 
         } catch (Exception ex) {

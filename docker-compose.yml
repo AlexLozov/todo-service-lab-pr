@@ -12,5 +12,30 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  my-service:
+    build:
+      context: .  # Бэкенд находится здесь же, где лежит docker-compose
+    container_name: my-service
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/todo-db-postgresql
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+
+  frontend:
+    build:
+      # ВАЖНО: Мы выходим из todo-service в папку "2" и заходим в todo-frontend
+      context: ../todo-frontend
+    container_name: todo-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - my-service
+
 volumes:
   postgres_data:

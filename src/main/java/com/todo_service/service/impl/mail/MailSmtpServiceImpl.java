@@ -1,4 +1,4 @@
-package com.todo_service.service.impl;
+package com.todo_service.service.impl.mail;
 
 import com.todo_service.model.constants.ApiErrorMessage;
 import com.todo_service.model.request.mail.MailSendSmtpRequest;

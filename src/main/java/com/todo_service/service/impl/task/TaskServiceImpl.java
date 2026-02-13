@@ -1,4 +1,4 @@
-package com.todo_service.service.impl;
+package com.todo_service.service.impl.task;
 
 import com.todo_service.model.constants.ApiErrorMessage;
 import com.todo_service.model.exception.TaskNotFoundException;
