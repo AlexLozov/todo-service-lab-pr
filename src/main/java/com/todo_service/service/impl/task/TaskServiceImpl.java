@@ -1,12 +1,15 @@
 package com.todo_service.service.impl.task;
 
 import com.todo_service.model.constants.ApiErrorMessage;
+import com.todo_service.model.constants.TaskStatus;
+import com.todo_service.model.constants.WebSocketTopics;
 import com.todo_service.model.exception.TaskNotFoundException;
 import com.todo_service.mapper.TaskMapper;
 import com.todo_service.model.entity.Task;
 import com.todo_service.model.request.task.TaskCreateRequest;
 import com.todo_service.model.request.task.TaskUpdateRequest;
 import com.todo_service.model.response.PaginationResponse;
+import com.todo_service.model.response.task.TaskNotificationResponse;
 import com.todo_service.model.response.task.TaskResponse;
 import com.todo_service.repository.TaskRepository;
 import com.todo_service.service.TaskService;
@@ -14,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +28,7 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final TaskMapper taskMapper;
+    private final SimpMessagingTemplate messagingTemplate; // - для websocket
 
     @Override
     @Transactional
@@ -31,6 +36,10 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskMapper.createTask(request);
         task.setIsFinished(false);
         taskRepository.save(task);
+
+        TaskNotificationResponse taskNotificationResponse = taskMapper.toTaskNotificationResponse(task, TaskStatus.CREATED);
+        messagingTemplate.convertAndSend(WebSocketTopics.TOPIC_TASKS.getTopic(), taskNotificationResponse);
+
         return taskMapper.entityToResponse(task);
     }
 
@@ -57,6 +66,10 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new TaskNotFoundException(ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)));
 
         Task updatedTask = taskMapper.updateTask(task, request);
+
+        TaskNotificationResponse taskNotificationResponse = taskMapper.toTaskNotificationResponse(updatedTask, TaskStatus.UPDATED);
+        messagingTemplate.convertAndSend(WebSocketTopics.TOPIC_TASKS.getTopic(), taskNotificationResponse);
+
         return taskMapper.entityToResponse(updatedTask);
     }
 
@@ -65,6 +78,9 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Integer id) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException(ApiErrorMessage.TASK_WITH_ID_NOT_FOUND.getMessage(id)));
+
+        TaskNotificationResponse taskNotificationResponse = taskMapper.toTaskNotificationResponse(task, TaskStatus.DELETED);
+        messagingTemplate.convertAndSend(WebSocketTopics.TOPIC_TASKS.getTopic(), taskNotificationResponse);
 
         taskRepository.deleteById(id);
     }

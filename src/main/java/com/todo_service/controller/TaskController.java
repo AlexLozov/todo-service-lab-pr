@@ -22,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Tag(name = "Task API", description = "CRUD операции с задачами")
 public class TaskController {
-    private final TaskService taskService;
     // - http://localhost:8080/swagger-ui/index.html
+    private final TaskService taskService;
 
     @PostMapping
     @Operation(summary = "Создать новую задачу")

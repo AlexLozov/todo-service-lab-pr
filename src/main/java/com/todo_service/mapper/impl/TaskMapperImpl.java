@@ -1,12 +1,15 @@
 package com.todo_service.mapper.impl;
 
 import com.todo_service.mapper.TaskMapper;
+import com.todo_service.model.constants.TaskStatus;
 import com.todo_service.model.entity.Task;
 import com.todo_service.model.request.task.TaskCreateRequest;
 import com.todo_service.model.request.task.TaskUpdateRequest;
+import com.todo_service.model.response.task.TaskNotificationResponse;
 import com.todo_service.model.response.task.TaskResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -42,6 +45,17 @@ public class TaskMapperImpl implements TaskMapper {
         return tasks.stream()
                 .map(this::entityToResponse)
                 .toList();
+    }
+
+    @Override
+    public TaskNotificationResponse toTaskNotificationResponse(Task task, TaskStatus status) {
+        return TaskNotificationResponse.builder()
+                .id(task.getId())
+                .title(task.getTitle())
+                .description(task.getDescription())
+                .localDateTime(LocalDateTime.now())
+                .status(status)
+                .build();
     }
 
 
