@@ -37,6 +37,7 @@ public class TaskMapperImpl implements TaskMapper {
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .isFinished(task.getIsFinished())
+                .date(task.getDate())
                 .build();
     }
 
@@ -55,6 +56,7 @@ public class TaskMapperImpl implements TaskMapper {
                 .description(task.getDescription())
                 .localDateTime(LocalDateTime.now())
                 .status(status)
+                .date(task.getDate())
                 .build();
     }
 

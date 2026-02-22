@@ -19,4 +19,5 @@ public class TaskNotificationResponse {
     private String description;
     private LocalDateTime localDateTime;
     private TaskStatus status;
+    private LocalDateTime date;
 }

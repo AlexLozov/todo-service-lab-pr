@@ -19,6 +19,6 @@ public interface TaskService {
     TaskResponse updateTask(Integer id, TaskUpdateRequest request);
     void deleteTask(Integer id);
 
-    PaginationResponse<TaskResponse> getTaskPage(int page, int limit);
-    PaginationResponse<TaskResponse> getTaskPageByStatus(Boolean isFinished, int page, int limit);
+    PaginationResponse<TaskResponse> getTaskPageByDate(int page, int limit);
+    PaginationResponse<TaskResponse> getTaskPageByStatusAndSortByDate(Boolean isFinished, int page, int limit);
 }

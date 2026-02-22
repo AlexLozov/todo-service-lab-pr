@@ -68,7 +68,7 @@ public class TaskController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int limit){
 
-        PaginationResponse<TaskResponse> response = taskService.getTaskPage(page, limit);
+        PaginationResponse<TaskResponse> response = taskService.getTaskPageByDate(page, limit);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }
@@ -80,7 +80,7 @@ public class TaskController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int limit){
 
-        PaginationResponse<TaskResponse> response = taskService.getTaskPageByStatus(isFinished, page, limit);
+        PaginationResponse<TaskResponse> response = taskService.getTaskPageByStatusAndSortByDate(isFinished, page, limit);
 
         return ResponseEntity.ok(ApiResponse.success(response));
     }

@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,8 +88,13 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaginationResponse<TaskResponse> getTaskPage(int page, int limit) {
-        Pageable pageable = PageRequest.of(page, limit);
+    public PaginationResponse<TaskResponse> getTaskPageByDate(int page, int limit) {
+
+        Pageable pageable = PageRequest.of(
+                page,
+                limit,
+                Sort.by(Sort.Direction.DESC, "date"));
+
         Page<Task> tasksPage = taskRepository.findAll(pageable);
 
         List<TaskResponse> tasks = tasksPage.stream()
@@ -110,12 +116,16 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public PaginationResponse<TaskResponse> getTaskPageByStatus(
+    public PaginationResponse<TaskResponse> getTaskPageByStatusAndSortByDate(
             Boolean isFinished,
             int page,
             int limit) {
 
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(
+                page,
+                limit,
+                Sort.by(Sort.Direction.DESC, "date"));
+
         Page<Task> tasksPage = taskRepository.findAllByIsFinished(isFinished, pageable);
 
         List<TaskResponse> tasks = tasksPage.stream()

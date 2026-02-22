@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,7 +24,7 @@ public class Task {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     @NotEmpty
     @Size(max = 64)
     private String title;
@@ -30,7 +33,11 @@ public class Task {
     @Size(max = 128)
     private String description;
 
-    @Column(name = "is_finished")
+    @Column(name = "is_finished", nullable = false)
     private Boolean isFinished = false;
+
+    @CreationTimestamp
+    @Column(name = "date", nullable = false, updatable = false)
+    private LocalDateTime date;
 
 }
