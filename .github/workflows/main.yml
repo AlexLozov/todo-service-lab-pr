@@ -1,8 +1,8 @@
-name: CI to Docker Hub
+name: Build and Push Backend
 
 on:
   push:
-    branches: [ "master" ] # Сборка запустится при пуше в ветку master
+    branches: [ "master" ]
 
 jobs:
   build-and-push:
@@ -20,13 +20,6 @@ jobs:
       - name: Build and push Backend
         uses: docker/build-push-action@v5
         with:
-          context: ./todo-service
+          context: . # Точка означает корень репозитория
           push: true
           tags: lozov/todo-backend:latest
-
-      - name: Build and push Frontend
-        uses: docker/build-push-action@v5
-        with:
-          context: ./todo-frontend
-          push: true
-          tags: lozov/todo-frontend:latest
